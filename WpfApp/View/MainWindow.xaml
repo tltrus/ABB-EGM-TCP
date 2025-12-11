@@ -1,0 +1,206 @@
+﻿<Window x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp"
+        mc:Ignorable="d"
+        Title="ABB EGM TCP Control" Height="434" Width="950">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="TextAlignment" Value="Right" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Width" Value="80" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#FFBC4444" />
+            <Setter Property="Margin" Value="2" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left side - robot info and control -->
+        <Grid Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0">
+                <Label Content="Connection Control:"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Connect to Robot" 
+                            Command="{Binding ConnectCommand}"
+                            IsEnabled="{Binding IsDisconnected}"
+                            Margin="5" Padding="10,5"/>
+                    <Button Content="Disconnect" 
+                            Command="{Binding DisconnectCommand}"
+                            IsEnabled="{Binding IsConnected}"
+                            Margin="5" Padding="10,5"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Current TCP position -->
+            <StackPanel Grid.Row="1">
+                <Label Content="Current TCP Position:"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="X (mm):"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ActTcpX}" Padding="5,0"/>
+                    <WrapPanel Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left">
+                        <Button Content="-" Width="20" Command="{Binding SendXminusCommand}" IsEnabled="{Binding IsConnected}"/>
+                        <Button Content="+" Width="20" Command="{Binding SendXplusCommand}" IsEnabled="{Binding IsConnected}"/>
+                    </WrapPanel>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Y (mm):"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ActTcpY}" Padding="5,0"/>
+                    <WrapPanel Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left">
+                        <Button Content="-" Width="20" Command="{Binding SendYminusCommand}" IsEnabled="{Binding IsConnected}"/>
+                        <Button Content="+" Width="20" Command="{Binding SendYplusCommand}" IsEnabled="{Binding IsConnected}"/>
+                    </WrapPanel>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Z (mm):"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ActTcpZ}" Padding="5,0"/>
+                    <WrapPanel Grid.Row="2" Grid.Column="2" HorizontalAlignment="Left">
+                        <Button Content="-" Width="20" Command="{Binding SendZminusCommand}" IsEnabled="{Binding IsConnected}"/>
+                        <Button Content="+" Width="20" Command="{Binding SendZplusCommand}" IsEnabled="{Binding IsConnected}"/>
+                    </WrapPanel>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Rx (deg):"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ActTcpRx}" Padding="5,0"/>
+                    <WrapPanel Grid.Row="3" Grid.Column="2" HorizontalAlignment="Left">
+                        <Button Content="-" Width="20" Command="{Binding SendRXminusCommand}" IsEnabled="{Binding IsConnected}"/>
+                        <Button Content="+" Width="20" Command="{Binding SendRXplusCommand}" IsEnabled="{Binding IsConnected}"/>
+                    </WrapPanel>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Ry (deg):"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding ActTcpRy}" Padding="5,0"/>
+                    <WrapPanel Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left">
+                        <Button Content="-" Width="20" Command="{Binding SendRYminusCommand}" IsEnabled="{Binding IsConnected}"/>
+                        <Button Content="+" Width="20" Command="{Binding SendRYplusCommand}" IsEnabled="{Binding IsConnected}"/>
+                    </WrapPanel>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="Rz (deg):"/>
+                    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding ActTcpRz}" Padding="5,0"/>
+                    <WrapPanel Grid.Row="5" Grid.Column="2" HorizontalAlignment="Left">
+                        <Button Content="-" Width="20" Command="{Binding SendRZminusCommand}" IsEnabled="{Binding IsConnected}"/>
+                        <Button Content="+" Width="20" Command="{Binding SendRZplusCommand}" IsEnabled="{Binding IsConnected}"/>
+                    </WrapPanel>
+                </Grid>
+            </StackPanel>
+
+            <!-- New TCP position settings -->
+            <StackPanel Grid.Row="3" Margin="0,20,0,0">
+                <Label Content="Target TCP Position:"/>
+            </StackPanel>
+
+            <Grid Grid.Row="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- TCP Position 1-6 -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="X (mm):"/>
+                <WrapPanel Grid.Row="0" Grid.Column="1">
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SetTcpX}" IsEnabled="{Binding CanSendCommands}"/>
+                    <!-- Read button -->
+                    <Button Content="READ TCP POSITION" 
+                           Command="{Binding ReadTcpCommand}"
+                           IsEnabled="{Binding IsConnected}"
+                           HorizontalAlignment="Center"
+                           Width="120" Margin="5,0,0,0"/>
+                </WrapPanel>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Y (mm):"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SetTcpY}" IsEnabled="{Binding CanSendCommands}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Z (mm):"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SetTcpZ}" IsEnabled="{Binding CanSendCommands}"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Rx (deg):"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding SetTcpRx}" IsEnabled="{Binding CanSendCommands}"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Ry (deg):"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SetTcpRy}" IsEnabled="{Binding CanSendCommands}"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Rz (deg):"/>
+                <WrapPanel Grid.Row="5" Grid.Column="1">
+                    <TextBox Text="{Binding SetTcpRz}" IsEnabled="{Binding CanSendCommands}"/>
+                    <!-- Send button -->
+                    <Button Content="SEND TCP POSITION" 
+                           Command="{Binding SendTcpCommand}"
+                           IsEnabled="{Binding IsConnected}"
+                           HorizontalAlignment="Center"
+                           Width="120" Margin="5,0,0,0" Background="#FF8BF551"/>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+
+        <!-- Right side - console -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <Label Content="Console"/>
+            <TextBox x:Name="ConsoleTextBox" 
+                     Text="{Binding ConsoleOutput}"
+                     IsReadOnly="True"
+                     VerticalScrollBarVisibility="Auto"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     FontFamily="Consolas"
+                     FontSize="12"
+                     Height="338"
+                     Width="Auto"
+                     HorizontalAlignment="Stretch">
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Clear console" Command="{Binding ClearConsoleCommand}"/>
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
+        </StackPanel>
+    </Grid>
+</Window>
